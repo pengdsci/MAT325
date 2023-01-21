@@ -1,0 +1,138 @@
+---
+title: "An RMarkdown Template for Written Assignments"
+author: "Cheng Peng "
+date: "Assignment #1 for MAT325"
+output:
+  pdf_document: 
+    toc: no
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: no
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  html_document: 
+    toc: no
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 6
+    fig_caption: yes
+    number_sections: no
+    theme: readable
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+
+
+
+# Problem 1.
+
+Find the derivative of function $f(x) = \sqrt{x^2 + 1}$.
+
+**Solution**: Using the power and chain rules, we have
+$$
+f^\prime(x) = \left[ (x^2+1)^{1/2}\right]^\prime = \frac{1}{2}(x^2+1)^{1/2-1}\times (x^2 + 1)^\prime = \frac{x}{\sqrt{x^2+1}}.
+$$
+
+# Problem 2.
+
+Let $f(x) = x^2$. Draw a secant line that passes through points $P(0,0)$ and $Q(1,1)$.
+
+**Solution**: We use the following R code to draw the secant line.
+
+```{r fig.align='center', fig.height=4, fig.width=4}
+x=seq(-2,2,by=0.05)
+y=x^2
+plot(x, y, type = "l", main = "y = x^2", col = "red", lwd = 2)
+segments(0,0,1,1, lwd=2, col="blue")
+points(0,0, pch=19, col = "purple")
+points(1,1, pch = 21, col = "gold")
+```
+
+
+
