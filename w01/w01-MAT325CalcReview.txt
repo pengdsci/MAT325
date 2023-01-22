@@ -1,0 +1,418 @@
+---
+title: "1. Calculus Review"
+author: "MAT321 Numerical Analysis "
+date: "Cheng Peng"
+output:
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 4
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    fig_height: 4
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+\
+
+
+# Introduction
+
+This note reviews the basics of Calculus which will be used throughout the semester. We will not derive or prove anything in this note. 
+
+# Limits and Continuity
+
+The concept of continuity of function is defined based on the concept of the limit of a function at a given point. They are core concepts in numerical analysis. We use $\epsilon\text{-}\delta$ language to summarize the limits and continuity. We only use single-variable functions to describe these concepts.
+
+## Limits
+
+```{r echo=FALSE, fig.align ="left",  out.width = '75%'}
+include_graphics("img/w01-LimitDef.png")
+```
+This definition can be graphically explained in the following figure
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-LimitDefCurve.png")
+```
+
+## Continuity
+
+The continuity of a function is defined based on the concept of limit. 
+
+**Definition**: Let $f$ be a function defined on a set $X$ of real numbers and $x_0 \in X$. Then $f$ is continuous
+at $x_0$ if
+$$
+\lim_{x\to x_0}f (x) = f (x_0).
+$$
+The function $f$ is continuous on the set $X$ if it is continuous at each number in $X$.
+
+
+## Convergence of A Sequence
+
+Convergence is one of the fundamental concepts in numerical analysis which is related to the limit of a sequence of real or complex numbers. In numerical analysis, the order of convergence and the rate of convergence of a convergent sequence are quantities that represent how quickly the sequence approaches its limit.
+
+**Definition**: Let $\{x_n\}^\infty_{n=1}$ be an infinite sequence of real numbers. This sequence has the **limit x (converges to x)** if, for any $\epsilon > 0$ there exists a positive integer $N(\epsilon)$ such that $|x_n-x|<\epsilon$, whenever $n > N(\epsilon)$. The notation
+$$
+\lim_{n \to\infty}x_n = x, \text{ or } x_n \to x \text{ as } n\to \infty,
+$$
+means that the sequence $\{x_n\}^\infty_{n=1}$ converges to $x$.
+
+
+**Definition**: If $f$ is a function defined on a set $X$ of real numbers and $x_0 \in X$, then the following statements are equivalent:
+
+a. $f$ is continuous at $x_0$;
+
+b. If $\{x_n\}^\infty_{n=1}$ is any sequence in $X$ converging to $x_0$, then $lim_{n\to \infty} f (x_n) = f (x_0)$.
+
+*Remark*: The values of above sequences in $X$ could be from both sides of $x_0$.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '65%'}
+if (knitr:::is_latex_output()) {
+  knitr::asis_output('\\url{https://github.com/pengdsci/MAT325/raw/main/w01/img/w01Note1-1-Comvergence.gif}')
+} else {
+  knitr::include_graphics("img/w01Note1-1-Comvergence.gif")
+}
+```
+
+
+\
+
+# Differentiation
+
+In numerical analysis, many numerical algorithms are based on the assumption that the curve of the underlying function is continuous and **smooth** over an interval. The smoothness of a curve is characterized by the concept of differentiation.
+
+## Definition
+
+**(Average) Rate of Change**: The rate of change of a function $f(x)$ over interval $[x, x+\Delta x]$ is defined to be
+$$
+\frac{f(x+\Delta x) - f(x)}{\Delta}
+$$
+
+Geometrically, the average rate of change of $f(x)$ over the interval is the slope of the secant line that passes through the two points on the curve corresponding to the two ending values of the interval.
+
+**Definition**: Let $f$ be a function defined in an open interval containing $x_0$. The function f is differentiable at $x_0$ if
+$$
+f^\prime(x_0) = \lim_{x\to x_0}\frac{f (x)-f (x_0)}{x-x_0}
+$$
+
+exists. The number $f(x_0)$ is called the derivative of $f$ at $x_0$. A function that has a derivative at each number in a set $X$ is differentiable on $X$.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-Derivative.png")
+```
+
+We will assume that you are proficient in using all rules of derivatives. Particularly, the power and chain rules.
+
+## Properties
+
+Some of the properties and existence theorems will be used in developing numerical algorithms for optimization.
+
+**Rolle's Theorem**: Suppose $f \in C[a, b]$ (continuous) and $f$ is differentiable on $(a, b)$. If $f (a) = f (b)$, then a number $c$ in $(a, b)$ exists with $f(c) = 0$.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-RolleTheorem.png")
+```
+
+The following mean value theorem is a generalization of Rolle's Theorem.
+
+**Mean Value Theorem**: If $f \in C[a, b]$ and f is differentiable on $(a, b)$, then a number $c$ in $(a, b)$ exists with
+$$
+\frac{f(b) - f(a)}{b - a}.
+$$
+We can visualize the mean value theorem in the following figure.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-MeanValue.png")
+```
+
+**Extreme Value Theorem**: If $f \in C[a, b]$, then $c_1, c_2 \in [a, b]$ exist with $f (c_1) \le f (x) \le f (c_2)$, for all $x \in [a, b]$. In addition, if $f$ is differentiable on $(a, b)$, then the numbers $c_1$ and $c_2$ occur either at the endpoints of $[a, b]$ or where $f$ is zero.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-ExtremeValue.png")
+```
+
+**Example 1**: Use a computer program to find the absolute minimum and absolute maximum values of
+$$
+f (x) = 5 \cos (2x) - 2x \sin (2x)
+$$
+on the intervals $[1, 2]$ and $[0.5, 1]$, respectively.
+
+**Solution**: We could free online graphing tools such as *WolframAlpha* (https://www.wolframalpha.com/) to sketch the function. We will use **R** to plot the function.
+
+```{r fig.align='center', fig.height=4, fig.width=4}
+x=seq(0, 2.5, by = 0.01)
+y=5*cos(2*x) - 2*x*sin(2*x)
+plot(x,y, type="l", lwd=2, col="navy", bty="n")
+abline(h=0, lty=2, col="red")
+abline(v=c(0.5, 1, 2), lty=4, col="skyblue")
+```
+
+(a). We can see from the above figure that, the absolute maximum on $[1, 2]$ is $f(2) = 5\cos(2\times 2) - 2\times 2 \sin(2\times 2) = -0.2410081$ (see the following code)
+
+```{r}
+5*cos(4) - 4*sin(4)
+```
+The absolute minimum is the solution to $f^\prime(x) = 0$. That is, we need to solve equation $-10\sin(2x) - 2\sin(2x) - 4x\cos(2x) = 0$ that is equivalent to  $\tan(2x) = x/3$. This is a nonlinear equation. There is no closed form of the solution. We will introduce various methods to find the root of this equation. For now, we simply call an R function to find the root. 
+
+```{r}
+# install and load the R package to use the built-in functions
+#if (!require("nleqslv")) {
+#   install.packages("nleqslv")
+#   library(nleqslv)
+#}
+##
+fn = function(x) tan(2*x)+x/3  # define the function 
+root = nleqslv(1.5, fn)$x      # the first list $x in the output is the root
+f.min = 5*cos(2*root) - 2*root*sin(2*root)  # finding the absolute minimum
+list(root = root, abs.min = f.min)
+```
+Therefore, the absolute minimum is $f(1.35823-5.675301) = -5.675301$.
+
+(2). Since the function is strictly decreasing on $[0.5, 1]$, to find the absolute minimum and maximum of the function on $[0.5, 1]$, we simply evaluate the function at $x = 0.5$ and $x = 1$ (see the following code). 
+
+```{r}
+list(abs.max = 5*cos(2*0.5) - 2*0.5*sin(2*0.5),
+     abs.min = 5*cos(2*1) - 2*1*sin(2*1))
+```
+Therefore, the absolute minimum is $f(1) = -3.899329$ and the absolute maximum $f(0.5) = 1.860041$.
+
+**Intermediate Value Theorem**: If $f \in C[a, b]$ and $K$ is any number between $f (a)$ and $f (b)$, then there exists a number $c$ in $(a, b)$ for which $f (c) = K$.
+
+The results in intuitive from the following figure.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-IntermediateValThm.png")
+```
+
+\
+
+**Example 2**: Show that $x^5 - 2x^3 + 3x^2 - 1 = 0$ has a solution in the interval $[0, 1]$.
+
+**Solution**: We want to prove the *existence* of a solution in $[0, 1]$. We first sketch the function in the following.
+
+```{r fig.align='center', fig.height=4, fig.width=4}
+x = seq(-0.5, 1.5, by =0.01)
+y = x^5-2*x^3 + 3*x^2-1
+plot(x,y, type="l", lwd=2, col="blue", bty="n")
+abline(v=c(0,1), lty = 2, col = "purple")
+abline(h=0, lty = 4, col="darkred")
+```
+
+After inspecting the curve, choose $a = 0$ and $b = 1$ and then use the intermediate value theorem. Note that $f(0) = -1$ and $f(1) = 1$. Therefore, $f(x) = 0$ has a solution in $[0,1]$.
+
+**Remark**: The intermediate value theorem states that the existence of *at least one solution* in interval $[a, b]$.
+
+
+
+# Integration
+
+Numerical integration is one of the major topics in numerical analysis. We focus on the definite integral of the single variable function.
+
+## Series vs Sequence
+
+A **sequence** is an arrangement of any objects or a set of numbers in a particular order followed by some rule. If $a_1, a_2, a_3, a_4,\cdots$, denote the terms of a sequence, then $1,2,3,4, \cdots$ denotes the position of the term. A sequence can be defined based on the number of terms i.e. either finite sequence or infinite sequence.
+
+If $a_1, a_2, a_3, a_4,\cdots$ is a sequence, then the corresponding **series** is given by $S_n = a_1+a_2+a_3 + \cdots + a_n$ for $n = 1, 2, \cdots,$. If $\lim_{n \to \infty} s_n = A$ ($A$ is finite), then we call series $s_n$ converges to $A$.
+
+
+## Definition of Definite Integral
+
+**Riemann Integral**: The Riemann integral of the function $f$ on the interval $[a, b]$ is the following limit,
+provided it exists:
+$$
+\int_a^bf(x) dx = \lim_{\max \Delta x_i \to 0} \sum_{i=1}^n f(z_i)\Delta x_i, 
+$$
+where the numbers $x_0, x_1, \cdots , x_n$ satisfy $a = x_0 \le  x_1 \le \cdots \le x_n = b$, where $x_i = x_i - x_{i-1}$, for each $i = 1, 2, \cdots, n$, and $z_i$ is arbitrarily chosen in the interval $[x_{i-1}, x_i]$.
+
+
+**Remark1**: The above Riemann integral involves two concepts
+
+1. **Partition of an interval**: $a = x_0 \le  x_1 \le \cdots \le x_n = b$ is also called a partition of interval $[a,b]$.
+
+2. $D_n = \sum_{i=1}^n f(z_i)\Delta x_i$ is so called Darboux sum. 
+
+
+In practice, we take a simple **equally spaced partition** to evaluate the Riemann integral. To be specific, use the partition such that $x_i = a + i(b-a)/n$. With this equally-spaced partition, the Riemann integral has the following simple form
+$$
+\int_a^b f(x) dx = \lim_{n \to \infty}\frac{b-a}{n}\sum_{i=1}^nf(x_i),
+$$
+The geometric display of the Darboux in the above expression is given below
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-DarbouxSum.png")
+```
+
+The area of the orange rectangle is the i-th term in the Darboux sum. 
+
+The following animated graph shows the process of approximating the integral by the Darboux sum.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '65%'}
+if (knitr:::is_latex_output()) {
+  knitr::asis_output('\\url{https://github.com/pengdsci/MAT325/raw/main/w01/img/w01-GIFRiemannSum.gif}')
+} else {
+  knitr::include_graphics("img/w01-GIFRiemannSum.gif")
+}
+```
+
+
+## Taylor Expansion
+
+Since polynomial functions are relatively easier to handle in mathematics. If we want to study the *local* behavior of a complicated function (algebraically), we could use a polynomial to approximate the function locally. The Taylor series is one such polynomial that is used frequently in practice.
+
+**Taylos's Theroem**: Suppose $f \in C^n[a,b]$, that $f^{(n+1)}$ exists on $[a,b]$, and $x_0 \in [a,b]$. For every $x \in [a,b]$, there exists a number $\xi(x)$ between $x_0$ and $x$ with
+
+
+
+$$
+f(x) = P_n(x) + R_n(x),
+$$
+where 
+$$
+P(x) = f(x_0) + f^\prime(x_0)(x - x_0)+\frac{f^{\prime\prime}(x_0)}{2!}(x-x_0)^2+\cdots+\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n
+$$
+$$
+=\sum_{k=0}^n\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k.
+$$
+and
+$$
+R_n(x) = \frac{f^{(n+1)}(\xi(x))}{(n+1)!}(x-x_0)^{n+1}.
+$$
+
+Here $P_n(x)$ is called the **nth Taylor polynomial** for f about $x_0$, and $R_n(x)$ is called the **remainder term (or truncation error)** associated with $P_n(x)$.
+
+When $x_0 = 0$, the Taylor polynomial is called **Maclaurin polynomial**.
+
+\
+
+**Example**: Let $f (x) = cos x$ and $x_0 = 0$. Determine the second Taylor polynomial for $f$ about $x_0$.
+
+**Solution**: We use the Taylor theorem to expand $cos(x)$ up two 2nd order
+$$
+cos(x) = f(0) + f^\prime(0)x+\frac{f^{\prime\prime}(0)}{2!}x^2+\frac{f^{(\xi(x))}(0)}{3!}x^3
+$$
+$$
+=1 - \frac{1}{2}x^2+\frac{1}{6}x^3\sin[\xi(x)].
+$$
+where $\xi(x)$ is in $[0, x]$. The following figure shows the approximation.
+```{r echo=FALSE, fig.align ="center",  out.width = '75%'}
+include_graphics("img/w01-MacclaurinExpansion.png")
+```
+
+
+# Homework [Part One]
+
+This is the first part of the Chapter #1 assignment. The second part of the problem set will be given next week. All problems are selected from the required textbook.
+
+**Submission Requirements**: All written submission must be through D2L. There are three different ways for preparing your submission;
+
+1. You are strongly encouraged to submit an electronic version (PDF) generated by the RMarkdown document to the D2L dropbox as a single file.
+
+2. You can prepare your work using the RMarkdown and then publish your completed work on RPubs. You can then simply provide a link to your solutions.
+
+3. You could also write your solutions by hand and then scan them to make a single file. Upload your file to the D2L drop box.
+
+\ 
+
+<font color = "red">**\color{red}Chapter One Homework due**</font>: Monday, 2/6 (before class meeting).
+
+\
+
+**Problems**:  Section 1.1: 1(a), 4(b), 11(a), 19, and 27.
+
