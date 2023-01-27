@@ -1,0 +1,369 @@
+---
+title: "1. Commonly Used R Objects in Scientific Computing"
+author: "Cheng Peng"
+date: "Lab Note for MAT325 Numerical Analysis "
+output:
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 4
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    fig_height: 4
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+
+\
+
+# Intrdoction
+
+R was initially created by group of statisticians for data analysis (for free). In the past decade, many people from other disciplines contributed to the continuous development of this program. It is among the top programming language in data science and machine learning and widely used to perform a variety of non-statistical tasks, including data processing, information visualization, data mining, and scientific computing, etc.
+
+During the semester, I will write series of short notes on R to implement numerical algorithms to be covered in the course. I will also write one or two lab notes to cover optimization problems in machine learning and data science.
+
+The following three books focus on using R for scientific computing. You can find one of them as a reference when you make programs for this class. 
+
+
+
+1. **Introduction to scientific programming and simulation using R**. This book can be found from internet. 
+
+2. **Mastering Scientific Computing with R**. WCU library has this eBook. You can access this book using the following link. <https://ebookcentral.proquest.com/lib/wcupa/detail.action?pq-origsite=primo&docID=1936749>
+
+3. **Using R Numerical Analysis in Science and Engineering**. You can also find this from internet.  
+
+For those who programmed in MATLAB, you can check the following page to see the back-to-back syntax comparison between R and MATLAB <https://mathesaurus.sourceforge.net/octave-r.html>.
+
+
+<font color = "red">**\color{red} R is case sensitive!**</font>.
+
+
+
+# Vectors and Matrices
+
+Vectors and matrices are two major R objects that will be used frequently in numerical analysis. This section outlines the definition and utilization of vectors and matrices. 
+
+## Vectors
+
+A vector is a collection of *like* elements without dimensions. The vector element or elements must be of the same types of data (either **character**, **numeric**, or **logical**). 
+
+### Definition
+
+An R vector defined by a built-in R function `c()` (**c** stands for concatenate). The following are examples of basic types of vectors. 
+
+```{r}
+intVec = c(1,3,6,7)                  # vector of integers
+charVec = c('One','Two','Three')     # vector of characters, string vector
+logiVec = c(FALSE, TRUE)             # logical vectors
+singe.Val.Vec = c("convergent")      # single element character vector
+emptyVec = NULL                      # empty vector / null vector 
+## 
+intVec                               # type the of the name of intVec
+```
+
+### Use of Vector Index
+
+One can access elements in a vector through index using square bracket `[idx]`. Similar to MATLAB, **R index starts from 1**! 
+
+```{r}
+exampleVec = c(1, 2, 3, 2, 7, 9, 11, 15, 7, 2)  # use this vector as an example
+###
+exampleVec[7]            # extract the 7th element in the vector
+exampleVec[c(1,2,3)]     # extract the first three elements, c(1,2,3) is the vector of indexes
+exampleVec[-7]           # drop the 7th element from the vector
+exampleVec[-c(1,2,3)]    # drop the first three elements
+duplVec = exampleVec     # duplicate an existing vector and rename it
+## The following code replaces elements with NEW elements
+duplVec[c(9,10)] = c(99,100)   # replace elements 7, 4 with 99 and 100 respectively.
+duplVec                  # display the modified vector
+```
+
+### Operations Between Vectors
+
+The following examples show the operations commonly used in error analysis.
+
+```{r}
+A = c(5, 2, 3, 7, 5, 1, 9)
+B = c(3, 2, 4, 8, 2, 7)
+## next we define different new vectors using A and B
+new01 = c(A,B)    # concatenate A and B
+new01             # display new01
+new02 = A-5       # subtract 5 from individual element in A 
+new02
+new03 = A^2       # square each individual element in A
+new03
+new04 = 2*A       # multiply each element of A by 2
+new04
+```
+
+### Shortcuts for Defining Vectors
+
+There are shortcuts to define patterned vectors (sequence). The following are few examples.
+
+```{r}
+seq.vec = seq(1, 100, by = 2)       # This defines a sequence: 1, 3, 5, 7, ..., 99. by = jump
+seq.vec
+seq.vec01 = seq(1, 99, length = 5)  # This defines a sequence with 5 numbers that are equally spaced between 1 and 99.
+seq.vec01
+seq.vec02 = rep(1, 100)             # This defines a sequence with 100 1s.
+seq.vec02
+seq.vec03 = 3:10                    # This sequence: 3,4,5,6,7,8,9,10.
+seq.vec03
+seq.vec04 = letters                 # letters is a built-in vector of all lower case letters    
+seq.vec04
+seq.vec05 = LETTERS                 # LETTERS is a built-in vector of all uppercase letters
+seq.vec05
+LETTERS[1:7]                        # first 7 uppercase letters.
+```
+
+## Matrices
+
+R matrices are two dimensional table indexed by two subscripts using $[i,j]$, where $i$ = index of row of the matrix and $j$ = index of the column of the matrix. On can access the matrix using index $[i,j]$. The following are some examples of matrices
+```{r}
+vec0 = 1:36
+m01 = matrix(vec0, ncol = 9, byrow = TRUE)   # this defines a 4x9 matrix, the cells were filled from vec0 by rows
+m01 
+m02 = matrix(vec0, nrow = 6, byrow = FALSE)  # this defines a 6x6 square matrix, cells were filled from vec0 by column
+m02
+m03 = matrix(ncol = 5, nrow = 6)       # this defined a 5x6 empty matrix
+m03
+m03[4,5] = 99                          # replace the element in row 4 and column 5 with 99.
+m03
+```
+
+\
+
+# Built-in Mathematical Functions and Operators
+
+R has built in most of the commonly used mathematical functions and important scalars. The following is a partial list.
+
+## Arithmetic Operators
+
+`+`    – addition
+
+`–`    – subtraction
+
+`*`    – multiplication
+
+`/`    – division
+
+`^`    – raise to the power of 
+
+## Basic Mathematical Functions
+
+`abs()`	     - absolute value
+
+`sqrt()`	   - square root
+
+`round()`    - rounding function
+
+`ceiling()`	 - rounding up
+
+`floor()`	   - rounding down
+
+`sign()`     - sign of a number	
+
+`exp()`      - natural base exponential function	
+
+`log()`      - natural base logarithmic function
+
+`log10()`    - base 10 logarithmic function
+
+## Trigonometry
+
+`sin()`      – sine
+
+`cos()`      – cosine
+
+`tan()`      – tangent
+
+`asin()`     – sine inverse
+
+`acos()`     – cosine inverse
+
+`atan()`     – tangent inverse
+
+## Linear Algebra
+
+`+`            – element-wise addition
+
+`–`            – element-wise subtraction
+
+`*`            – element-wise multiplication
+
+`/`            – element-wise division
+
+`%*%`        – matrix multiplication
+
+`t()`            – transpose
+
+`eigen()`    – eigenvalues and eigenvectors
+
+`solve()`    – inverse of matrix
+
+`rbind()`    – combines vectors of observations horizontally into matrix class
+
+`cbind()`    – combines vectors of observations vertically into matrix class
+
+\
+
+# Graphic Functions in Base R
+
+Base R graphical system contains a set of **high-level plotting functions** such as `plot()`, `hist()`, `barplot()`, etc. and also a set of **low-level functions** that are used jointly with the high-level plotting functions such as `points()`, `lines()`, `text()`, `segments()`, etc. to make a flexible graphical system.  
+
+Next we use a simple example to illustrate the basic graphic functions. We draw the curves of two functions $f_1(x) = \sin(x)$ and $f_2(x) = \cos(x)$ over interval $[-2\pi, 2\pi]$.
+
+```{r fig.align='center'}
+x = seq(-2*pi, 2*pi, length = 200)  # define a sequence of numbers on the interval
+f1 = sin(x)                         # evaluate f1 = sin(x) at these values
+f2 = cos(x)                         # evaluate f2 = cos(x) at these values
+##
+plot(x, f1,                         # x- and y- coordinates
+        type = "l",                 # lower case l in the quote means line. The default option is point. "b" = both line and point.
+        xlab = "X Value",           # label of x-axis, if not specified, the name of x vector will be used
+        ylab = "Y value", 
+        ylim = c(-1.5, 2.0),        # the limits of y-axis, must be a vector of two values. The default limits are min and max of f1
+        xlim = c(-2*pi, 2*pi),      # the limits of x-axis, if it is not provided, the min and max values of x will be used.
+        col = "red",                # select a color for the line
+        lty = 1,                    # line type. 1 = solid, 2 = dash, ....
+        cex = 1.2,                  # size, default = 1
+        main = "The curves of sin(x) and cos(x)",   # the title of the plot.
+        bty = "n"                   # remove the outbox on the plot. The default plot has an outer box.
+     )
+abline(h = 0, lty = 4, col = "darkgreen")                       # add a horizontal line at y = 0
+lines(x, f2, lty = 2, lwd = 2, col = "blue")                    # cos(x) curve to the existing plot. Caution: use lines(), not plot().
+## add a few special points on both curves
+pt.x = seq(-2*pi, 2*pi, length = 9)                             # select 9 x-coordinates to make 9 points
+pt.y1 = sin(pt.x)                                               # 
+pt.y2 = cos(pt.x)
+## Adding points to the two curves
+points(pt.x, pt.y1,                    # add points to f1 = sin(x)
+         pch = 16,                     # point types, there 20+ types of points in R
+         col = "red",
+         cex = 1.5)                    # size of the points, default cex = 1
+points(pt.x, pt.y2, pch = 21, col = "blue", cex = 1.5)
+## adding legends
+legend("top",      # location of the legend, other locations: "bottom", "topleft", "topright" bottomleft", "bottomright", providing
+                   # the coordinates of the location to place the legend.
+              c("sin(x)", "cos(x)"),         # label of the corresponding curves
+              pch = c(16, 21),               # the corresponding point type
+              col = c("red", "blue"),        # corresponding color
+              lty = c(1, 2),                 # corresponding line type
+              lwd = c(2,2),                  # corresponding line width
+              bty = "n")                     # no box placed around the legend
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
