@@ -1799,11 +1799,13 @@ that meets <span class="math inline">\(|e - P_n(1)| &lt;
 TOL\)</span>.</p>
 <pre><code>INPUT  initial degree: n, 
             tolerance: TOL, 
+         iteration ID: iter,
 OUTPUT the desired degree N of the polynomial
 
 Step 1. SET   n = 0;
             SUM = 0;
-Step 2. WHILE n &lt; M + 1 DO:
+            iter = 0;
+Step 2. WHILE iter &lt; M + 1 DO:
         
         1. SUM = SUM + 1/n!    # n! = n factorial
            ERR = e - SUM       # e = 2.718282
@@ -1812,8 +1814,8 @@ Step 2. WHILE n &lt; M + 1 DO:
                WRITE (tolerance achieved!)
                STOP
            ELSE DO
-               n = n + 1
-               IF n == M + 1 
+               iter = iter + 1
+               IF iter == M + 1 
                   WRITE (maximum iteration achieved!)
                ENDIF
            ENDIF

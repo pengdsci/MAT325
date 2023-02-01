@@ -3,6 +3,18 @@ title: "3. Error Analysis, Algorithms and Convergence"
 author: "Cheng Peng"
 date: "Lecture Note for MAT325 Numerical Analysis "
 output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
   html_document: 
     toc: yes
     toc_depth: 4
@@ -12,18 +24,6 @@ output:
     number_sections: yes
     theme: readable
     fig_height: 4
-  word_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    keep_md: yes
-  pdf_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    number_sections: yes
-    fig_width: 3
-    fig_height: 3
 editor_options: 
   chunk_output_type: inline
 ---
@@ -319,11 +319,13 @@ without using the Taylor polynomial remainder term.
 ```
 INPUT  initial degree: n, 
             tolerance: TOL, 
+         iteration ID: iter,
 OUTPUT the desired degree N of the polynomial
 
 Step 1. SET   n = 0;
             SUM = 0;
-Step 2. WHILE n < M + 1 DO:
+            iter = 0;
+Step 2. WHILE iter < M + 1 DO:
         
         1. SUM = SUM + 1/n!    # n! = n factorial
            ERR = e - SUM       # e = 2.718282
@@ -332,8 +334,8 @@ Step 2. WHILE n < M + 1 DO:
                WRITE (tolerance achieved!)
                STOP
            ELSE DO
-               n = n + 1
-               IF n == M + 1 
+               iter = iter + 1
+               IF iter == M + 1 
                   WRITE (maximum iteration achieved!)
                ENDIF
            ENDIF
