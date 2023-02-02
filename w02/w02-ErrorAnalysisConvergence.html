@@ -1797,28 +1797,28 @@ input values are (1) tolerance TOL and the initial degree of the Taylor
 polynomial. The output is the smallest degree of the Taylor polynomial
 that meets <span class="math inline">\(|e - P_n(1)| &lt;
 TOL\)</span>.</p>
+<p><strong>Caution</strong>: In general, one should consider to include
+two stopping rules: error tolerance and maximum iterations. In this
+particular example, the maximum number of iterations is simply the
+solution of the problem. Therefore, there is one stopping rule: TOL</p>
 <pre><code>INPUT  initial degree: n, 
             tolerance: TOL, 
-         iteration ID: iter,
+            
 OUTPUT the desired degree N of the polynomial
 
 Step 1. SET   n = 0;
-            SUM = 0;
-            iter = 0;
-Step 2. WHILE iter &lt; M + 1 DO:
-        
-        1. SUM = SUM + 1/n!    # n! = n factorial
-           ERR = e - SUM       # e = 2.718282
-        2. IF |ERR| &lt; TOL DO
+            SUM = 0;  
+            ERR = exp(1);
+Step 2. WHILE ERR &gt; TOL DO:
+        1. SUM = SUM + 1/n!         # n! = n factorial
+           ERR = exp(1) - SUM       # exp(1) = 2.718282
+        2. IF |ERR| &lt; TOL DO:
                OUTPUT (N)
                WRITE (tolerance achieved!)
                STOP
-           ELSE DO
-               iter = iter + 1
-               IF iter == M + 1 
-                  WRITE (maximum iteration achieved!)
-               ENDIF
-           ENDIF
+           ELSE DO:
+               n = n + 1
+          ENDIF
         ENDWHILE</code></pre>
 <p><br />
 </p>
