@@ -1,0 +1,325 @@
+---
+title: "3. User Defined R Functions"
+author: "Cheng Peng"
+date: "Lab Note for MAT325 Numerical Analysis "
+output:
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 6
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    fig_height: 6
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 5
+    fig_height: 5
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+
+\
+
+
+# Introduction
+
+One of the great strengths of R is that it allows users to extend the capacity of R through user-defined functions. Functions are often used to encapsulate a sequence of expressions that need to be executed repetitively. We have made code to implement bisection and fixed-point methods by specific examples. We may want to write the R function of these implementations so we can use them for other root-finding problems with the appropriate input information. 
+
+
+# Syntax and Types of User-Defined R Functions
+
+The syntax of the general user-defined R function has the following form
+
+```
+myfunction <- function(arg1, arg2, ... ){
+   statements
+   return(object)
+}
+```
+
+`arg1, arg2, ...` are arguments that are passed into the function. The arguments could be any objects such as vectors and other user-defined R functions.
+
+
+
+**Example 1** Finding the standard deviation of an input vector.
+
+```{r}
+sdfun <- function(x) {
+  res <- sqrt(sum((x - mean(x))^2) / (length(x) - 1))
+  return(res)
+}
+##
+vec = c(1,4,2,6,-3, -5)
+sdfun(x = vec)   # or simply sdfun(vec)
+```
+
+We have defined functions in implementing root-finding methods.
+
+\
+
+# Writing R Functions for Root-finding Methods
+
+As an example, we will write an R function to implement the bisection method for finding the root for any given equation on ver an interval (if it exists). Two versions of R functions will be presented in the following.
+
+## Function with Numerical Outputs
+
+We simply wrap up the example code in the lecture note to make the following function.
+
+```{r}
+num.FixedPoint = function(fn,       # function that satisfies f(x) = x
+                          a,        # lower limit of the interval [a, b]
+                          b,        # upper limit of the interval [a, b]
+                          TOL,      # error tolerance
+                          N,        # maximum number of iterations
+                          x0,       # initial value of x
+                          detail,    # intermediate output
+                          ...){
+ gfun = fn
+ x = x0
+ ERR = Inf
+ n = 0
+## 
+ while (ERR > TOL){
+  n = n + 1
+  new.x = gfun(x)
+  ERR = abs(new.x - x)
+  if(ERR < TOL){
+    cat("\n\nThe algorithm converges!")
+    cat("\nThe approximate root is:", new.x,".")
+    cat("\nThe absolute error is:", ERR, ".")
+    cat("\nThe number of iterations is:", n, ".")
+    break
+  } else{
+    if(ERR > 10^7){
+        cat("\n\nThe algorithm diverges!")
+        break
+    } else{
+         if(detail == TRUE){
+            cat("\nIteration:",n,". Estimated root:", new.x, ". Absolute error:", ERR,".")
+          }
+         x = new.x         # update x value!!!
+    }
+  }
+  if(n == N){
+    cat("\n\nThe maximum number of iterations is achieved!")
+    break
+  } 
+ }
+}
+
+```
+
+Next, we use several examples.
+
+**Example 1** Using the fixed-point method to find the approximate root of $x^3 - 7x +2 = 0$. To use the fixed-point method, we rewrite the equation into the form $(x^3 + 2)/7 = x$. Then $g(x) = (x^3 + 2)/7$ will be the function to be passed into the function.
+
+```{r}
+###
+fun0 = function(x) (x^3 + 2)/7
+num.FixedPoint(fn = fun0, a = 0, b = 2, TOL = 10^(-6), N = 200, x0 =1.5, detail = TRUE)
+```
+
+**Example 2**: Calculate $1/\sqrt{2}$ by using the fixed-point method. Note that $f(x) = x^2 - 1/2$. To use the fixed point method, we need $g(x) = x -x^2 +1/2$ as the input function.
+
+```{r}
+###
+fun0 = function(x) x - x^3 + 1/2
+num.FixedPoint(fn = fun0, a = -1, b = 2, TOL = 10^(-5), N = 200, x0 =0.7, detail =FALSE)
+```
+
+## Function with More Optional Outputs
+
+We include graphics the function created previously.
+
+```{r fig.align='center', fig.height=6, fig.width=6}
+FixedPointAlgR = function(fn,       # function that satisfies f(x) = x
+                          a,        # lower limit of the interval [a, b]
+                          b,        # upper limit of the interval [a, b]
+                          TOL,      # error tolerance
+                          N,        # maximum number of iterations
+                          x0,       # initial value of x
+                          detail=TRUE,   # intermediate numerical outputs
+                          graphic=TRUE,  # intermediate graphic outputs
+                          x.lim,    # x-axis of graphic window
+                          y.lim,    # y-axis of graphic window
+                          sleep,    # sleep time between iterations
+                          ...){
+ gfun = fn      # rename the input function used in the function
+ x = x0         # rename the initial value used in the function
+ ERR = Inf      # initial error (a big  number to start the iteration)
+ n = 0          # initial iteration counter - iterator or index
+##
+ if(graphic==TRUE){
+ xlimit=c(a-0.1*abs(b-a), b+0.1*abs(b-a))               # x-limit in the graphic window
+ xx=seq(a-0.1*abs(b-a), b+0.1*abs(b-a), length = 2000)  # sequence of x values
+ yy1 = gfun(xx)                                         # evaluate g(x)
+ yy2 = xx                                               # evaluate diagonal
+ plot(xx, yy1, ylim = y.lim, xlim = x.lim, type = "l", lwd = 2, lty = 1, col = "blue")
+ lines(xx,yy2, lwd = 2, lty = 1, col ="darkred")        # add line y = x
+ title("Fixed Point Algorithm Approximation")           # add title to the graphic
+ }
+## 
+ while (ERR > TOL){
+  Sys.sleep(sleep)                                      # put the system to sleep
+  n = n + 1
+  new.x = gfun(x)
+  ERR = abs(new.x - x)
+  if(ERR < TOL){
+    cat("\n\nThe algorithm converges!")
+    cat("\nThe approximate root is:", new.x,".")
+    cat("\nThe absolute error is:", ERR, ".")
+    cat("\nThe number of iterations is:", n, ".")
+    break
+  } else{
+    if(ERR > 10^7){
+        cat("\n\nThe algorithm diverges!")
+        break
+    } else{
+         if(detail == TRUE){
+            cat("\nIteration:",n,". Estimated root:", new.x, ". Absolute error:", ERR,".")
+         }
+        if(graphic==TRUE){
+            segments(new.x, new.x,       new.x,       gfun(new.x), col="purple")
+            segments(new.x, gfun(new.x), gfun(new.x), gfun(new.x), col="purple")
+           }
+
+         x = new.x         # update x value!!!
+    }
+  }
+  if(n == N){              # checking iteration limit
+    cat("\n\nThe maximum number of iterations is achieved!")   
+    break
+  } 
+ }
+}
+
+```
+
+\
+
+**Example 1** (Revisited)
+
+```{r}
+###
+fun0 = function(x) (x^3 + 2)/7
+FixedPointAlgR(fn = fun0, a = 0, b = 1, TOL = 10^(-6), N = 200, 
+               x0 =0.35, detail = TRUE, graphic = FALSE, 
+               x.lim=c(0.285, 0.294), y.lim=c(0.28, 0.32), sleep = 0.1)
+```
+
+\
+
+**Example 2** (Revisited)
+
+```{r}
+###
+fun0 = function(x) x - x^3 + 1/2
+FixedPointAlgR(fn = fun0, a = -1, b = 2, TOL = 10^(-5), N = 200, 
+               x0 =-1.2, detail =FALSE, graphic = TRUE, 
+               x.lim=c(0.7, 0.9), y.lim=c(0.6, 0.9), sleep = 0.1)
+```
+
+
+
+
+
+
+
+
+
+
