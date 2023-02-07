@@ -1628,7 +1628,7 @@ STEP 2.  WHILE ERR &gt; TOL DO:
                      a = m               (updating ending value)
                      b = b               (not necessary...)
                  ENDIF
-         STEP 5. IF f(a)f(b) &gt; 0 DO:
+         STEP 5. IF f(m)f(b) &gt; 0 DO:
                     a = a
                     b = m
                  ENDIF
@@ -1715,23 +1715,23 @@ fn = function(x){
 ## Loop begins
 while(ERR &gt; TOL){
   n = n + 1
-  m = a + (b - a) / 2     # midpoint
-  if (fn(m)*fn(b) &lt; 0){
-      a = m
+  m = a + (b - a) / 2     # midpoint of interval [a, b]
+  if (fn(m)*fn(b) &lt; 0){   # new interval should be [m, b]
+      a = m               # m will be the new a
       b = b
-  } else {
+  } else {                # new interval should be [a,m]
       a = a
-      b = m
+      b = m               # m will be the new &#39;b&#39;
    }
-  ERR = abs(b - a)
+  ERR = abs(b - a)        # updated absolute error
   ## Output information
-  if(ERR &lt; TOL){
+  if(ERR &lt; TOL){  # if the absolute error is less than TOL, print out results
     cat(&quot;\nThe algorithm converges!&quot;)
     cat(&quot;\nThe number of iteration n =&quot;, n, &quot;.&quot;)
     cat(&quot;\nThe approximate root r =&quot;, (a + b)/2,&quot;.&quot;)
     cat(&quot;\nThe absolute error ERR =&quot;, ERR,&quot;.&quot;)
     break
-  } else { ## output of intermediate iteration
+  } else {            ## output of intermediate iteration
     cat(&quot;\nIteration:&quot;,n,&quot;. The absolute error ERR =&quot;, ERR, &quot;.&quot;)  
     }
   ### Test attainment to the max iteration
