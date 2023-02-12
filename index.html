@@ -189,7 +189,7 @@
                    <li class="nav-item" data-level="2"><a href="#week03" class="nav-link">3. Bisection and Fixed Point Methods</a></li>
                    <li class="nav-item" data-level="2"><a href="#week04" class="nav-link">4. Newton Methods</a></li>
                    <li class="nav-item" data-level="2"><a href="#week05" class="nav-link">5. Interpolation and Divided Differences</a> </li>
-                   <li class="nav-item" data-level="2"><a href="#week06" class="nav-link">6. Cubic Splines </a> </li>   
+                   <li class="nav-item" data-level="2"><a href="#week06" class="nav-link">6. Concepts of Splines </a> </li>   
                    <li class="nav-item" data-level="2"><a href="#week07" class="nav-link">7. Review and Exam #1 <br>
                        <font color = "red">[Exam #1, Friday, 3/10]</font></a></li>
                    <li class="nav-item" data-level="2"><a href="#week08" class="nav-link">8. Differentiation and Integration </a></li>
@@ -493,46 +493,84 @@ VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
 
 <!--VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV   
 VVVVVVVVVVVVVVVVV              Week #04            VVVVVVVVVVVVVVVVV
-VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV  >
-<h3 id="week04"  class="section">Week 04: Fixed-point Method </h3>
+VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV  -->
+<h3 id="week04"  class="section">Week 04: Newton Method and Secant Method </h3>
 
 <hr><left>
         
 <b>TOPICS:</b> The following topics will be covered this week.<br>
 <ul>
-     <li> Fixed-point Method (implementation) </li>
-     <!--li> |<a href="w04-MidtermReview.pdf" target="popup"  
-                    onclick="window.open('w04-MidtermReview.pdf',
-                       'name','width=900,height=500')">
-                   Midterm Review Note [Link]</a>| </li>
-    
-     <li> Newton Method and Its Extensions 
-        <ul>
-           <li> Newton Method: algorithm, convergence, error analysis
-           <li> Secant Method: algorithm, convergence, error analysis
-        </ul>
-
+     <li> Newton Method </li>
+         <ul>
+            <li> Algorithm</li>
+            <li> Error Analysis</li>
+         </ul>
+     <li> Secant Method</li> 
+         <ul>
+            <li> Algorithm</li>
+            <li> Error Analysis</li>
+         </ul>
   </ul>
 
-<b>LAB:</b> MATLAB code and exercises 
-  <ul>
-    
-  </ul>  
+<b>CLASS NOTES:</b> Regular lecture and lab notes / code for this week.
+            <ul>
+             <li> Lecture Note 5: Newton Method <br>
+                 |<a href="w04/w04-NewMethod.html" target="popup"  
+                    onclick="window.open('w04/w04-NewMethod.html',
+                       'name','width=900,height=500')">
+                   HTML</a>| 
+                 <a href="w04/w04-NewMethod.pdf" target="popup"  
+                    onclick="window.open('w04/w04-NewMethod.pdf',
+                       'name','width=900,height=500')">
+                   PDF</a>|
+                  <a href="w04/w04-NewMethod.Rmd" target="popup"  
+                    onclick="window.open('w04/w04-NewMethod.Rmd',
+                       'name','width=900,height=500')">
+                   RMD</a>|
+                </li>
+             <li> Lecture Note 6: Secant Method <br>
+                 |<a href="w04/w04-SecantMethod.html" target="popup"  
+                    onclick="window.open('w04/w04-SecantMethod.html',
+                       'name','width=900,height=500')">
+                   HTML</a>| 
+                 <a href="w04/w04-SecantMethod.pdf" target="popup"  
+                    onclick="window.open('w04/w04-SecantMethod.pdf',
+                       'name','width=900,height=500')">
+                   PDF</a>|
+                  <a href="w04/w04-SecantMethod.Rmd" target="popup"  
+                    onclick="window.open('ww04/w04-SecantMethod.Rmd',
+                       'name','width=900,height=500')">
+                   RMD</a>|
+                </li>
+                 <li> Lab Note 2: Implementing False Position Method <!--br>
+                 |<a href="w02/w02-MAT325LabLoops.html" target="popup"  
+                    onclick="window.open('w02/w02-MAT325LabLoops.html',
+                       'name','width=900,height=500')">
+                   HTML</a>| 
+                 <a href="w02/w02-MAT325LabLoops.pdf" target="popup"  
+                    onclick="window.open('w02/w02-MAT325LabLoops.pdf',
+                       'name','width=900,height=500')">
+                   PDF</a>|
+                  <a href="w02/w02-MAT325LabLoops.Rmd" target="popup"  
+                    onclick="window.open('w02/w02-MAT325LabLoops.Rmd',
+                       'name','width=900,height=500')">
+                   RMD</a>| -->
+                </li>
+            </ul>
+      
     
     
     <b>ASSIGNMENTS AND DUES:</b>
     <ul>
-      <li><b>Reading assignments</b>: Read sections 2.2 and 2.3 of <font color = "red"> the required textbook.</font> . </li> 
-      <li> Computer lab.<!--a href="w02-weeklyquiz-key.pdf" target="popup" 
-                    onclick="window.open('w02-weeklyquiz-key.pdf',
-                'name','width=900,height=500')"><font color = "red" size = 4> <b>Answer Key to Week #2 Quiz</b></font></a></li> 
-                <ul>
-                    <li> Due: Friday, 2/17/2023.</li>
-                    <li> Answer Key <!--a href="w02-weeklyquiz-key.pdf" target="popup" 
-                    onclick="window.open('w02-weeklyquiz-key.pdf',
-                'name','width=900,height=500')"><font color = "red" size = 4> <b>Answer Key to Week #2 Quiz</b></font></a></li>
-                 </ul>
-      <li> Chapter 2 HW.<!--a href="w02-weeklyquiz-key.pdf" target="popup" 
+      <li><b>Reading assignments</b>: Read sections 2.3 and 2.4 of <font color = "red"> the required textbook.</font> . </li> 
+      <li> <font color = "red"><b>Chapter 2 HW (Full list)</b></font>.<br>
+           <b>Section 2.1</b>: 5(a), 7, 13.<br>
+           <b>Section 2.2</b>: 1, 7 (first part), 12(a) <br>
+           <b>Section 2.3</b>: 2, 3, 11(a), 19. <br>
+           <font color = "red"><b>HW Due: Sunday, 2/20.  </b></font>
+           
+          
+          <!--a href="w02-weeklyquiz-key.pdf" target="popup" 
                     onclick="window.open('w02-weeklyquiz-key.pdf',
                 'name','width=900,height=500')"><font color = "red" size = 4> <b>Answer Key to Week #2 Quiz</b></font></a></li> 
                 <ul>
