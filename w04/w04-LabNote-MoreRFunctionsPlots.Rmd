@@ -1,0 +1,451 @@
+---
+title: "2. Making Publication-Ready Outputs"
+author: "Cheng Peng"
+date: "Lecture Note for MAT325 Numerical Analysis "
+output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 4
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    fig_height: 4
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+if (!require("pander")) {
+   install.packages("pander")
+   library(pander)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      
+                      warnings = FALSE,   
+                      messages = FALSE,  
+                      results = TRUE     
+                      )   
+```
+
+
+\
+
+# Introduction
+
+This note focuses on how to create publication-ready tables and graphics. We use Newton's method as an illustrative example.
+
+# R Function for Newton Method
+
+Recall the R code developed in the lecture note.
+
+```{r}
+# Define f(x) and f'(x)
+
+fn = function(x) x^3 - x +3
+dfn = function(x) 3*x^2 - 1
+
+# initial values
+n = 0
+x = -1
+M = 200
+TOL = 10^(-6)
+ERR = abs(fn(x)/dfn(x))
+# loop begins
+while(ERR > TOL){
+  n = n + 1
+  x = x - fn(x)/dfn(x)
+  ERR = abs(fn(x)/dfn(x))
+  if(ERR < TOL){
+     cat("\n\nAlgorithm converges!")
+     cat("\nThe approximated root:", x, ".")
+     cat("\nThe absolute error:", ERR, ".")
+     cat("\nThe number of iterations n =",n,".")
+     break
+    } else{
+      cat("\nIteration n =",n, ", approximate root:",x,", absolute error:", ERR,".")
+    } 
+    if (n ==M){
+      cat("\n\nThe maximum iterations attained!")
+      cat("\nThe algorithm did not converge!")
+      break
+    }
+}
+```
+
+Next, we simply wrap up the above code and write a function.
+
+```{r}
+NewtonVersion01 = function(fn,     # function used to define the equation
+                           dfn,    # derivative of f(x)
+                           x,      # initial value
+                           M,      # pre-set maximum iteration 
+                           TOL,    # error tolerance 
+                           ...
+    ){
+    n = 0
+    ERR = abs(fn(x)/dfn(x))
+    # loop begins
+    while(ERR > TOL){
+    n = n + 1
+    x = x - fn(x)/dfn(x)
+    ERR = abs(fn(x)/dfn(x))
+    if(ERR < TOL){
+       cat("\n\nAlgorithm converges!")
+       cat("\nThe approximated root:", x, ".")
+       cat("\nThe absolute error:", ERR, ".")
+       cat("\nThe number of iterations n =",n,".")
+       break
+     } else{
+       cat("\nIteration n =",n, ", approximate root:",x,", absolute error:", ERR,".")
+     } 
+     if (n ==M){
+        cat("\n\nThe maximum iterations attained!")
+        cat("\nThe algorithm did not converge!")
+        break
+    }
+  }
+}
+```
+
+**Example 1**: Solve $f(x) = x^3 - x +3 = 0$. Note that $f^\prime(x) = 3x^2 -1$.
+
+```{r}
+##
+fn = function(x) x^3 - x + 3
+dfn = function(x) 3*x^2 - 1
+##
+NewtonVersion01(fn = fn,        # function used to define the equation
+                dfn = dfn,      # derivative of f(x)
+                x = -1,         # initial value
+                M = 200,        # pre-set maximum iteration 
+                TOL = 10^(-6)   # error tolerance 
+                )
+```
+
+# Output Tables
+
+```{r echo = TRUE}
+NewtonVersion02 = function(fn,         # function used to define the equation
+                           dfn,        # derivative of f(x)
+                           x,          # initial value
+                           M,          # pre-set maximum iteration 
+                           TOL,        # error tolerance 
+                           out.table,  # intermediate output table 
+                           ...
+    ){
+    n = 0
+    ERR = abs(fn(x)/dfn(x))
+    # Result table
+    Result = NULL
+    # Intermediate Table
+    Intermediate.output = data.frame(Iteration = 1:M, 
+                                     Estimated.root = rep(NA,M),
+                                     Absolute.error = rep(NA,M))
+    # loop begins
+    while(ERR > TOL){
+    n = n + 1
+    x = x - fn(x)/dfn(x)
+    ERR = abs(fn(x)/dfn(x))
+    if(ERR < TOL){
+       Intermediate.output[n, ] = c(n, x, ERR) 
+       #Result =c(Total.Iteration = n, Estimated.Root = x, Absolute.Error = ERR)
+       break
+     } else{
+       Intermediate.output[n, ] = c(n, x, ERR)   # store intermediate outputs
+     } 
+     if (n ==M){
+        cat("\n\nThe maximum iterations attained!")
+        cat("\nThe algorithm did not converge!")
+        break
+     }
+    }
+    # out of the loop
+    Intermediate.output = na.omit(Intermediate.output)
+    if (out.table == TRUE){
+      pander(Intermediate.output)
+    }
+     #pander(Result)
+}
+```
+
+```{r}
+##
+fn = function(x) x^3 - x + 3
+dfn = function(x) 3*x^2 - 1
+##
+NewtonVersion02(fn = fn,        # function used to define the equation
+                dfn = dfn,      # derivative of f(x)
+                x = -1,         # initial value
+                M = 200,        # pre-set maximum iteration 
+                TOL = 10^(-6),  # error tolerance
+                out.table = TRUE
+                )
+```
+
+
+\
+
+# Creating Subtasks - Computational Thinking
+
+Ideally, we would like to have a function to output more than one object so that we can see tables, graphics, etc. Unfortunately, one R function can output a single object. However, we can use a single object such as vectors, matrices, and data frames, and then use the output object to create other objects such as tables and figures.
+
+One clean way for obtaining different pieces of information in coding is to make several tidy functions/routines and call these functions to get the desired information. 
+
+For all root-finding methods, all desired summarized information is based on iterations, estimated roots, and errors in each step.   
+
+The following **Newton.Method()** returns a data frame that contains information about *number of iterations, estimated roots, and absolute errors*. We also write two graphic functions to extract information from the Newton method.
+
+
+```{r}
+Newton.Method = function(fn,         # function used to define the equation
+                           dfn,        # derivative of f(x)
+                           x,          # initial value
+                           M,          # pre-set maximum iteration 
+                           TOL,        # error tolerance 
+                           ...){
+    n = 0
+    ERR = abs(fn(x)/dfn(x))
+    # Result table
+    Result = NULL
+    # Intermediate Table
+    Intermediate.output = data.frame(Iteration = 1:M, 
+                                     Estimated.root = rep(NA,M),
+                                     Absolute.error = rep(NA,M))
+    # loop begins
+    while(ERR > TOL){
+    n = n + 1
+    x = x - fn(x)/dfn(x)
+    ERR = abs(fn(x)/dfn(x))
+    if(ERR < TOL){
+       Intermediate.output[n, ] = c(n, x, ERR) 
+       #Result =c(Total.Iteration = n, Estimated.Root = x, Absolute.Error = ERR)
+       break
+     } else{
+       Intermediate.output[n, ] = c(n, x, ERR)   # store intermediate outputs
+     } 
+     if (n ==M){
+        cat("\n\nThe maximum iterations attained!")
+        cat("\nThe algorithm did not converge!")
+        break
+     }
+    }
+    # out of the loop
+    Intermediate.output = na.omit(Intermediate.output)
+    Intermediate.output
+}
+```
+
+It is always a good idea to write a function to draw the curve of a given function on a given interval $[a, b]$.
+
+```{r}
+curve.fun = function(fn, a, b){
+  xx = seq(a,b, length = 200)   # 200 x-values evenly spread over [a,b]
+  yy = fn(xx)                   # corresponding y values
+  plot(xx, yy, type = "l", lwd = 2, col = "blue",
+               xlab = "",  ylab = "",  main = "")
+  abline(h = 0, lty = 1, col = "red")
+}
+```
+
+
+```{r}
+ErrorPlot = function(errorMatrix){
+     niter = dim(errorMatrix)[1]  # total number of iterations
+     iteration = 0:(niter + 1)
+     abs.error = errorMatrix[,3]
+     plot(1:niter, abs.error, type = "b", lwd = 2, col = "blue", pch = 16,
+                            xlab = "Number of Iteration",
+                            ylab = "Absolute Error",
+                            xlim = c(0,niter+1),
+                            ylim = c(0, max(abs.error)),
+                            main = "Error Pattern")
+ }
+```
+
+\
+
+
+
+**Example 2**: draw the curve of $f(x) = 5 x^3 - 7 x^2 - 40 x + 100$ over interval $[-7, 7]$
+
+**Solution**: We simply call the above function to curve the given function in the following.
+
+```{r}
+fn = function(x) 5 * x^3 - 7 * x^2 - 40 * x + 100
+curve.fun(fn=fn, a = -7, b = 7)
+```
+
+The derivative of $f(x)$ is
+
+$$
+f^\prime(x) = 15x^2 - 14x - 40
+$$
+
+From the above figure, we can see that one of the roots is in $[-7, 7]$. We choose the initial value $x = 6$
+
+
+```{r}
+##
+fn = function(x) 5*x^3 - 7*x^2 - 40*x + 100
+dfn = function(x) 15*x^2 - 14*x - 40
+##
+Intermediate.output = Newton.Method(fn = fn, dfn = dfn,  x = 5, M = 200, TOL = 10^(-6))
+pander(Intermediate.output)
+```
+
+
+```{r}
+ErrorPlot(errorMatrix = Intermediate.output)
+```
+
+
+
+
+\
+
+# The **source()** Function
+
+We can also put all R functions in a single file and store that file in web space. The function of the file can be called directly from R using function **source()**.  
+
+
+```{r echo FALSE}
+source("https://raw.githubusercontent.com/pengdsci/MAT325/main/w04/NewtonMethodCode.txt")
+```
+
+Note that the names of the three functions are different from the one used in **Example 2**! We redo Example 2 using the functions in <https://raw.githubusercontent.com/pengdsci/MAT325/main/w04/NewtonMethodCode.txt>
+
+
+\
+
+**Example 3**: draw the curve of $f(x) = 5 x^3 - 7 x^2 - 40 x + 100$ over interval $[-7, 7]$
+
+**Solution**: We simply call the above function to curve the given function in the following.
+
+
+```{r echo = FALSE}
+fn = function(x) 5 * x^3 - 7 * x^2 - 40 * x + 100
+curve.fun0(fn=fn, a = -7, b = 7)
+```
+
+The derivative of $f(x)$ is
+
+$$
+f^\prime(x) = 15x^2 - 14x - 40
+$$
+
+From the above figure, we can see that one of the roots is in $[-7, 7]$. We choose the initial value $x = 6$
+
+
+```{r echo = FALSE}
+##
+fn = function(x) 5*x^3 - 7*x^2 - 40*x + 100
+dfn = function(x) 15*x^2 - 14*x - 40
+##
+Intermediate.output = Newton.Method0(fn = fn, dfn = dfn,  x = 5, M = 200, TOL = 10^(-6))
+pander(Intermediate.output)
+```
+
+
+```{r echo = FALSE}
+ErrorPlot0(errorMatrix = Intermediate.output)
+```
+
+
+# This Week's Lab Assignment
+
+Use the fixed-point code in the lecture note as the baseline to create three functions (with detailed comments on your code) and solve $f(x)  = 5 x^3 - 7 x^2 - 40 x + 100 = 0$. Please submit a PDF version of your completed work that includes both code and outputs.
+
+
+
+
+
+
+
+
+
+
+
+
