@@ -1,0 +1,66 @@
+###################################################################################
+Newton.Method = function(fn,         # function used to define the equation
+                           dfn,        # derivative of f(x)
+                           x,          # initial value
+                           M,          # pre-set maximum iteration 
+                           TOL,        # error tolerance 
+                           ...){
+    n = 0
+    ERR = abs(fn(x)/dfn(x))
+    # Result table
+    Result = NULL
+    # Intermediate Table
+    Intermediate.output = data.frame(Iteration = 1:M, 
+                                     Estimated.root = rep(NA,M),
+                                     Absolute.error = rep(NA,M))
+    # loop begins
+    while(ERR > TOL){
+    n = n + 1
+    x = x - fn(x)/dfn(x)
+    ERR = abs(fn(x)/dfn(x))
+    if(ERR < TOL){
+       Intermediate.output[n, ] = c(n, x, ERR) 
+       #Result =c(Total.Iteration = n, Estimated.Root = x, Absolute.Error = ERR)
+       break
+     } else{
+       Intermediate.output[n, ] = c(n, x, ERR)   # store intermediate outputs
+     } 
+     if (n ==M){
+        cat("\n\nThe maximum iterations attained!")
+        cat("\nThe algorithm did not converge!")
+        break
+     }
+    }
+    # out of the loop
+    Intermediate.output = na.omit(Intermediate.output)
+    Intermediate.output
+}
+
+#################################################################################
+curve.fun = function(fn, a, b){
+  xx = seq(a,b, length = 200)   # 200 x-values evenly spread over [a,b]
+  yy = fn(xx)                   # corresponding y values
+  plot(xx, yy, type = "l", lwd = 2, col = "blue",
+               xlab = "",  ylab = "",  main = "")
+  abline(h = 0, lty = 1, col = "red")
+}
+
+#################################################################################
+ErrorPlot = function(errorMatrix){
+     niter = dim(errorMatrix)[1]  # total number of iterations
+     iteration = 0:(niter + 1)
+     abs.error = errorMatrix[,3]
+     plot(1:niter, abs.error, type = "b", lwd = 2, col = "blue", pch = 16,
+                            xlab = "Number of Iteration",
+                            ylab = "Absolute Error",
+                            xlim = c(0,niter+1),
+                            ylim = c(0, max(abs.error)),
+                            main = "Error Pattern")
+ }
+
+
+
+
+
+
+
