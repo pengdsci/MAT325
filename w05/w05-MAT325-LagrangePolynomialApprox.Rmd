@@ -3,6 +3,18 @@ title: "8. Lagrange Interpolation"
 author: "Cheng Peng"
 date: "Lecture Note for MAT325 Numerical Analysis "
 output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
   html_document: 
     toc: yes
     toc_depth: 4
@@ -12,18 +24,6 @@ output:
     number_sections: yes
     theme: readable
     fig_height: 4
-  word_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    keep_md: yes
-  pdf_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    number_sections: yes
-    fig_width: 3
-    fig_height: 3
 editor_options: 
   chunk_output_type: inline
 ---
@@ -252,7 +252,7 @@ Next, we use several special interpolations to illustrate the construction of La
 Assume that we are given two distinct points $\{(x_0, y_0), (x_1, y_1)\}$. The objective is to find an interpolation "*polynomial*" that passes through the two points. Intuitively, we use the following two-point form
 
 $$
-y = \frac{y_1 - y_0}{x - x_0}(x - x_0) + y_0
+y = \frac{y_1 - y_0}{x_1 - x_0}(x - x_0) + y_0
 $$
 The above function is linear (degree 1 polynomial). We use 
 
@@ -528,6 +528,80 @@ legend("top", c("Interpolated Polynomial", "Original Function"),
        lwd=rep(2,2), lty=1:2, col = c("red", "blue"), bty="n")
 ```
 
+
+# Error Analysis
+
+It is important to understand the nature of the error term when the Lagrange polynomial is used to approximate a continuous function $f(x)$. 
+
+We can see from the expression of Lagrange basis polynomials that the error term of Lagrange interpolation should be similar to that for the Taylor polynomial, except that the factor $(x - x_0)^{n+1}$ is replaced with the product $(x - x_0)(x - x1) \cdots (x - x_n)$. This is expected because interpolation is exact at each of the $n + 1$ nodes $x_k$ , where we have error term $E_n (x_k) = f(x_k) - P_n (x_k) = y_k - y_k = 0$ for $k = 0, 1, 2, \cdots , n$.
+
+The following theorem specifies the error term of the Lagrange interpolation.
+
+**Theorem**:Assume that $f \in C^{n+1}[a, b]$ and that $x_0, x_1, \cdots , x_n \in [a, b]$ are $n + 1$ nodes. If $x \in [a, b]$, then
+
+$$
+f(x) = P_n(x) + E_n(x)
+$$
+
+where $P_n(x)$ is a polynomial used to approximate $f(x)$
+
+$$
+f(x) \approx P_n(x) = \sum_{j=0}^n f(x_j)L_j(x) = \sum_{j=0}^n y_jL_j(x)
+$$
+
+ 
+The error term $E_n(x)$ has the form
+ 
+$$
+E_n(x) = \frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)(x-x_1)\cdots(x-x_n)
+$$
+
+for some value $c = c(x)$ that lies in the interval $[a, b]$.
+
+**Proof** (I only prove the special case of $n = 2$, i.e., with 3 interpolation nodes).
+
+For given two nodes $x_0, x_1 x_2$ and an arbitrarily chosen $x$, If $x = x_j (j = 0, 1, 2)$, then error $E_2(x) = 0$.
+
+We now assume that the arbitrarily chosen value $x \ne x_j (j =0, 1, 2)$.  
+
+Denote $w(t) = (t - x_0)(t - x_1)(t - x_2)$ and $\lambda = [f(x) - P_2(x)]/w(x)$. Clearly, $w(x) \ne 0$. We now define an auxiliary function $\phi(t) = f(t) - P_2(t) - \lambda w(t)$. Apparently, $\phi(x) = 0$, $\phi(x_j) = 0$ (for $j = 0, 1,2$), and $\phi \in C^3[a, b]$. 
+
+since $f\in C^3[a,b]$ and $\phi (t) = 0$ has four roots, $x, x_0, x_1, x_2$ in $[a, b]$, there are 3 roots for $\phi^\prime(t) = 0$ in the open interval $(a, b)$ according to Rolle’s Theorem (special case of the Mean Value Theorem). It follows that there are 2 roots for $\phi^{\prime\prime}(t) = 0$ in $(a, b$) and 1 root for $\phi^{\prime\prime\prime}(t)=0$ in $(a, b)$.
+
+Therefore, $\exists c = c(x)$ so that $c(x) \in (a,b)$ and $\phi^{\prime\prime\prime}(c) = 0$. Note that, $\phi^{\prime\prime\prime}(t) = f^{\prime\prime\prime}(t) – P_2^{\prime\prime\prime}(t) – \lambda w^{\prime\prime\prime}(t)$.
+
+From the definition of $P_2(t)$ and $w(t)$ we know that $P_2^{\prime\prime\prime}(t) =0$ and $w^{\prime\prime\prime}(t) = 3!$. Plugging these values into the above equation, we have  $\lambda^{\prime\prime\prime}(t)=f^{\prime\prime\prime}(t) - \lambda 3!$. Consequently, $f^{\prime\prime\prime}(c) - \lambda 3! =0$. Recall that $\lambda = [f(x) - P_2(x)]/w(x)$ and $w(x) = (x - x_0)(x - x_1)(x - x_2)$.  We rewrite $f^{\prime\prime\prime}(c) - \lambda 3! =0$ as follows
+$$
+f^{\prime\prime\prime}(c) - \frac{3![f(x) - P2(x)]}{(x - x0)(x - x1)(x - x2)} = 0
+$$.
+
+Therefore, 
+
+$$
+f(x) - P_2(x) = \frac{f^{\prime\prime\prime}(c) }{3!}(x - x_0)(x - x_1)(x - x_2).
+$$
+The proof is completed.
+
+The following corollary gives the error bound explicitly.
+
+
+**Corollary**: Assume that $f \in C^{n+1}[a, b]$ and $|f^{(n+1)}(x)| \le M$ for all $x \in [a, b]$. Assume also that nodes $x_0, x_1, \cdots , x_n \in [a, b]$ are equally spaced. If $x \in [a, b]$. Let $P_n(x)$ be the unique interpolating polynomial with degree $\le n$ at the aforementioned equally spaced nodes. If $x \in [a, b]$, then
+
+$$
+|f(x) - P_n(x)|\le \frac{M}{4(n+1)}\left(\frac{b-a}{n} \right)^{n+1}.
+$$
+
+
+**Remark**: If the $(n+1)$-th derivative is not uniformly bounded, the error bound in the above corollary should be in the following form
+ 
+$$
+|f(x) - P_n(x)|\le \frac{\max_{c\in [a,b]}|f^{(n+1)}(c)|}{4(n+1)}\left(\frac{b-a}{n} \right)^{n+1}.
+$$
+
+**Example 4**: In $f(x) = \cos(x)$, the (n+1)-th derivative is uniformly bounded, one can force the error arbitrarily small by choosing the number of nodes.
+
+
+**Example 5**: In $f(x) = 1/ (1 + x2)$, the derivative cannot be uniformly bounded. Increasing the number of nodes may not decrease the error.
 
 
 

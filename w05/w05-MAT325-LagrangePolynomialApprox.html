@@ -1739,7 +1739,7 @@ Interpolation</h2>
 is to find an interpolation “<em>polynomial</em>” that passes through
 the two points. Intuitively, we use the following two-point form</p>
 <p><span class="math display">\[
-y = \frac{y_1 - y_0}{x - x_0}(x - x_0) + y_0
+y = \frac{y_1 - y_0}{x_1 - x_0}(x - x_0) + y_0
 \]</span> The above function is linear (degree 1 polynomial). We use</p>
 <p><span class="math display">\[
 p_1(x) = \frac{y_1 - y_0}{x - x_0}(x - x_0) + y_0.
@@ -2117,8 +2117,8 @@ these values into the above equation, we have <span class="math inline">\(\lambd
 - \lambda 3!\)</span>. Consequently, <span class="math inline">\(f^{\prime\prime\prime}(c) - \lambda 3!
 =0\)</span>. Recall that <span class="math inline">\(\lambda = [f(x) -
 P_2(x)]/w(x)\)</span> and <span class="math inline">\(w(x) = (x - x_0)(x
-- x_1)(x - x_2)\)</span>. We rewrite <span class="math inline">\(f^{\prime\prime\prime}(c) - λ 3! =0\)</span> as
-follows <span class="math display">\[
+- x_1)(x - x_2)\)</span>. We rewrite <span class="math inline">\(f^{\prime\prime\prime}(c) - \lambda 3! =0\)</span>
+as follows <span class="math display">\[
 f^{\prime\prime\prime}(c) - \frac{3![f(x) - P2(x)]}{(x - x0)(x - x1)(x -
 x2)} = 0
 \]</span>.</p>
@@ -2129,7 +2129,7 @@ x_1)(x - x_2).
 \]</span> The proof is completed.</p>
 <p>The following corollary gives the error bound explicitly.</p>
 <p><strong>Corollary</strong>: Assume that <span class="math inline">\(f
-\in C^{n+1}[a, b]\)</span> and <span class="math inline">\(|f^{(n+1)}(x)| ≤ M\)</span> for all <span class="math inline">\(x \in [a, b]\)</span>. Assume also that nodes
+\in C^{n+1}[a, b]\)</span> and <span class="math inline">\(|f^{(n+1)}(x)| \le M\)</span> for all <span class="math inline">\(x \in [a, b]\)</span>. Assume also that nodes
 <span class="math inline">\(x_0, x_1, \cdots , x_n \in [a, b]\)</span>
 are equally spaced. If <span class="math inline">\(x \in [a,
 b]\)</span>. Let <span class="math inline">\(P_n(x)\)</span> be the
