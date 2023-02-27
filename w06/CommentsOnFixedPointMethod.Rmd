@@ -1,0 +1,161 @@
+---
+title: "Comments on Fixed-point Methods"
+author: "Cheng Peng"
+date: "Lecture Note for MAT325 Numerical Analysis "
+output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 4
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    fig_height: 4
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML. it is a simple mechanism for adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: left;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+#
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+
+\
+     
+This short note emphasizes some facts about the fixed-point method.
+
+
+The idea of the fixed point method with an initial guess $x_0$ chosen computes a sequence
+$$
+x_{n+1} = g(x_n), \ \ \ n \ge 0
+$$
+**in the hope that** $x_n \to \alpha$.
+
+
+
+*  For a given non-linear equation $f(x) = 0$, there different ways to formulate the fixed-point problems. That is, we can define different $g(x) = x$ based on $f(x) = 0$.
+
+**Example 1**: Solve $f(x) = 5x^3 - 7x^2 - 40x + 100 = 0$.  We can define different fixed-point problems:
+
+(1). $g(x) = (5x^3 - 7x^2 + 100)/40 = x$
+
+(2). $g(x) = \sqrt{(5x^3-40x +100)/7} = x$
+
+(3). $g(x) = \sqrt[3]{(7x^2+40x - 100)/5} = x$
+
+(4). $g(x) = -\sqrt[3]{(-7x^2-40x + 100)/5} = x$
+
+We write more fixed-point form.
+
+
+* Whether the sequence generated from the fixed-point algorithm is dependent on the form of $g(x)$ and the starting value $x_0$. 
+
+**Example 2** (continuation of example 1):  Formulation (4) generates a convergent sequence (with $x_0 = -3$) and the rest of the listed fix-point formulations cannot generate a convergence sequence.
+
+
+* In general, showing the convergence of the sequence ($x_n$) obtained from the iterative process is not easy. The contraction mapping theorem can be used to test whether the sequence is convergent.
+
+
+
+
+
+
+
+
+
+
+
+
