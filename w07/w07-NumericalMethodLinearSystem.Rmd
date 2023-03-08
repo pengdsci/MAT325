@@ -498,4 +498,222 @@ where
 
 * $i = k+1, k+2, ...n$, the iterator of the row of the augmented matrix.
 
+\
+
+
+
+
+
+# Gaussian Elimination Algorithm
+
+We focus on Gaussian row elimination. The Gaussian forward elimination and backward substitution (Gauss-Jordan) are optional.
+
+## Gauss Forward Elimination
+
+The algorithm of Gaussian is relatively simple compared with the iterative algorithms we learned earlier. We only need to convert the following recursive equation to an algorithm with double loops to accomplish the Gaussian forward elimination.
+
+**Gaussian Forward Elimination Algorithm**
+
+```{}
+INPUT: A    (augmented matrix)
+
+OUTPUT: A0  (row-echelon matrix)
+
+STEP 1: find n = # of row
+
+STEP 2: FOR i = 1 TO n
+        STEP 3:  IF A[i,i] == 0 DO: 
+                    find j with A[j,i] != 0
+                    swap row i and row j
+                 ENDIF
+         
+        STEP 4:  IF A[i,i] != 0 DO:
+                    FOR j = i + 1 TO n DO: 
+                       A[j,] = A[j,]-(A[j,i]/A[i,i])*A[i,]
+                    ENDFOR
+                 ENDIF
+STEP 5: RETURN A0   
+```
+
+
+The vector operation was used in **Step 4** of the pseudo-code. Row-swapping in **step 3** could also involve vector operation.
+
+Next, we write R code to implement the pseudo-code.
+
+
+```{r}
+Gauss.Elimination = function(A){
+  # Input A: augmented matrix. Make sure that he diagonal 
+  #          elements of the coefficient matrix are non-zero! 
+  A0 = A        
+  n = dim(A0)[1]                # number of rows
+  for(i in 1:(n-1)){            # iterator fo pivot element A0[i,i]
+                                # i = 1, 2, ..., n-1
+      #~~~~~~~~~~~~~~~~~~~~~   Make the function robust  ~~~~~~~~~~~~~~~~~~~~~~~~~#
+      if(A0[i,i] == 0){
+          non.0 = which(A0[,i] != 0)
+              #cat("\n\n i =",i, ", non.0 =", non.0,". (i+1):n =", (i+1):n, ".")
+              id = intersect(non.0, (i+1):n)[1] # which() equiv to find() in MATLAB
+              if(!is.na(id)){
+              tempi = A0[i,]                    # put the i-th row in a place-holder
+              A0[i,] = A0[id,]                  # row swapping
+              A0[id,] = tempi    
+            }
+      }
+      #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+       if(A0[i,i] != 0){    # A0[i,i] is in the denominator of recursive equation
+          for(j in (i+1):n){  # to make the augmented matrix in the row echelon form
+             #cat("\n\n j =",j,".")
+             A0[j,] = A0[j,] - (A0[j,i]/A0[i,i])*A0[i,]
+           }
+        }
+      }
+   A0
+ }
+
+```
+
+
+We now look at several examples using the above R function `Gauss.Elimination()`.
+
+**Example 2**: Find the solution of the following system of linear equations. 
+
+```{r echo=FALSE, fig.align ="center",  out.width = '35%'}
+include_graphics("img/w07-LabExample02-eq.png")
+```
+
+**Solution**: Performing Gaussian eliminations (i.e., the series of row operations), we have
+
+```{r echo=FALSE, fig.align ="center",  out.width = '55%'}
+include_graphics("img/w07-LabExample02-sol.png")
+```
+
+```{r}
+##
+A1 = matrix(c(0,1,-3,4,1,2,-2,1,0,-1,2,-1,-2,4,0,-6,4,3,-8,1), ncol =5, byrow = TRUE)
+Gauss.Elimination(A = A1)
+```
+
+\
+
+**Example 3** Solve the following system of linear equations.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '35%'}
+include_graphics("img/w07-LabExample03-eq.png")
+```
+
+**Solution**: Performing Gaussian eliminations (i.e., the series of row operations), we have
+
+```{r echo=FALSE, fig.align ="center",  out.width = '55%'}
+include_graphics("img/w07-LabExample03-sol.png")
+```
+
+```{r}
+A1 = matrix(c(1,1,-3,4,2,1,-1,2,3,2,-4,7), ncol = 4, byrow = TRUE)
+Gauss.Elimination(A = A1)
+```
+
+
+
+
+\
+
+**Example 4** Solve the following system of linear equations.
+
+```{r echo=FALSE, fig.align ="center",  out.width = '22%'}
+include_graphics("img/w07-LabExample04-eq.png")
+```
+
+**Solution**: Performing Gaussian eliminations (i.e., the series of row operations), we have
+
+```{r echo=FALSE, fig.align ="center",  out.width = '50%'}
+include_graphics("img/w07-LabExample04-1-sol.png")
+```
+
+```{r}
+A1 = matrix(c(1/4, 1/2, 1, 23/4, 1,1,1,7,4,2,1,2), ncol = 4, byrow = TRUE)
+Gauss.Elimination(A = A1)
+```
+
+
+## Gauss-Jordan Elimination (`Optional`)
+
+
+```{r}
+####
+Gauss.Jordan = function(A){
+  # A is the augmented matrix
+  A1 = Gauss.Elimination(A)           # perform Gauss elimination
+  n = length(A1[,1])
+  id.0 = rep(1,n)                     # indicator of zero A[i,i]
+  for (i in 1:n){
+    if(A1[i,i] == 0) id.0[i] = 0
+  }
+  if(sum(id.0) == n){                  # A[i,i] != 0
+        k = n
+        A2 = A1[k:1, c(k:1,(n+1))]     # re-arrange rows and columns
+        A3 = Gauss.Elimination(A2)     # perform Gauss elimination
+        A4 = A3[k:1, c(k:1,(n+1))]     # backward re-arrangement
+      } else{                          # if exists A[i,i] =0
+        k = which(id.0==0)[1]-1   # select rows and columns for re-arrangement
+        A2 = A1[c(k:1,(k+1):n), c(k:1,(k+1):(n+1))]
+        A3 = Gauss.Elimination(A2)
+        A4 = A3[c(k:1,(k+1):n), c(k:1,(k+1):(n+1))]
+      }
+   A4
+}
+
+```
+
+**Example 5** (continuation of **Example 4**)
+
+We can perform additional row operations (Gaussian-Jordan) to get
+
+```{r echo=FALSE, fig.align ="center",  out.width = '50%'}
+include_graphics("img/w07-LabExample04-2-sol.png")
+```
+
+
+```{r}
+A1 = matrix(c(1/4, 1/2, 1, 23/4, 1,1,1,7,4,2,1,2), ncol = 4, byrow = TRUE)
+Gauss.Jordan(A = A1)
+```
+\
+
+**Example 6** (continuation of **Example 2**) Gauss-Jordan elimination
+```{r}
+A6 = matrix(c(0,1,-3,4,1,2,-2,1,0,-1,2,-1,-2,4,0,-6,4,3,-8,1), ncol =5, byrow = TRUE)
+Gauss.Jordan(A = A6)
+```
+
+\
+
+**Example 7** (continuation of **Example 3**) Gauss-Jordan form
+
+```{r}
+A7 = matrix(c(1,1,-3,4,2,1,-1,2,3,2,-4,7), ncol = 4, byrow = TRUE)
+Gauss.Jordan(A = A7)
+```
+
+\
+
+**Example 8** (continuation of **Example 4**) Gauss-Jordan form
+
+```{r}
+A8 = matrix(c(1/4, 1/2, 1, 23/4, 1,1,1,7,4,2,1,2), ncol = 4, byrow = TRUE)
+Gauss.Jordan(A = A8)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
