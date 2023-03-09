@@ -1,0 +1,223 @@
+---
+title: "Midterm Exam One"
+author: "MAT325 Numerical Analysis"
+date: "3/10/2023"
+output:
+  html_document: 
+    toc: no
+    toc_depth: 4
+    toc_float: yes
+    fig_width: 4
+    fig_caption: yes
+    number_sections: no
+    theme: readable
+    fig_height: 4
+  word_document: 
+    toc: no
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: no
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: no
+    fig_width: 3
+    fig_height: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+
+<style type="text/css">
+
+/* Cascading Style Sheets (CSS) is a stylesheet language used to describe the 
+presentation of a document written in HTML or XML. it is a simple mechanism for 
+adding style (e.g., fonts, colors, spacing) to Web documents. */
+
+h1.title {  /* Title - font specifications of the report title */
+  font-size: 24px;
+  color: DarkRed;
+  text-align: center;
+  font-family: "Gill Sans", sans-serif;
+}
+h4.author { /* Header 4 - font specifications for authors  */
+  font-size: 20px;
+  font-family: system-ui;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { /* Header 4 - font specifications for the date  */
+  font-size: 18px;
+  font-family: system-ui;
+  color: DarkBlue;
+  text-align: center;
+}
+h1 { /* Header 1 - font specifications for level 1 section title  */
+    font-size: 22px;
+    font-family: system-ui;
+    color: navy;
+    text-align: center;
+}
+h2 { /* Header 2 - font specifications for level 2 section title */
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h3 { /* Header 3 - font specifications of level 3 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: navy;
+    text-align: left;
+}
+
+h4 { /* Header 4 - font specifications of level 4 section title  */
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: darkred;
+    text-align: left;
+}
+
+body { background-color:white; }
+
+.highlightme { background-color:yellow; }
+
+p { background-color:white; }
+
+</style>
+```
+```{r setup, include=FALSE}
+# Detect, install and load packages if needed.
+if (!require("knitr")) {
+   install.packages("knitr")
+   library(knitr)
+}
+if (!require("MASS")) {
+   install.packages("MASS")
+   library(MASS)
+}
+if (!require("nleqslv")) {
+   install.packages("nleqslv")
+   library(nleqslv)
+}
+if (!require("pander")) {
+   install.packages("pander")
+   library(pander)
+}
+#
+options(digits = 15)
+# specifications of outputs of code in code chunks
+knitr::opts_chunk$set(echo = TRUE,      # include code chunk in the output file
+                      warnings = FALSE,  # sometimes, you code may produce warning messages,
+                                         # you can choose to include the warning messages in
+                                         # the output file. 
+                      messages = FALSE,  #
+                      results = TRUE     # you can also decide whether to include the output
+                                         # in the output file.
+                      )   
+```
+
+
+\
+
+\
+
+# Instructions
+
+\
+
+**General Information**: This is an open book and open note exam. You can use the textbook, lecture notes, R code/function in lecture/lab notes, and internet resources for the exam. However, you must complete the exam independently. No collaboration is allowed.
+
+**Specific Requirements**:
+
+1. Use RMarkdown or other typesetting software programs to prepare your solution.
+
+2. The code must be commented on and included in the solution. If you use a typesetting program other than RMarkdown, please put the code in the appendix. 
+
+3. Please upload a copy of your solution in PDF format and a copy source file to the D2L drop box.
+
+4. Please feel free to use/modify the code from the lectures and those you developed in the assignments.
+
+\
+
+\
+
+# Problem Set
+
+
+## Problem 1: Finding the root of a non-linear equation
+
+Consider the function $f(x) = \tan(\sin(x^3))$ over interval $[0, \sqrt{\frac{5}{2}}]$. 
+
+
+1. Choose 500 equally-spaced base points in the interval $[0, \sqrt{\frac{5}{2}}]$ and plot the curve of the function.
+
+
+2. Find all roots of equation $\tan(\sin x^3) = 0$ mathematically over interval $\left[0, \sqrt{\frac{5}{2}}\right]$.
+
+
+3. Use the Newton method to find these roots (use $TOL = 10^{-6}$) and compare these approximate roots with their corresponding true roots.
+
+
+\
+
+
+## Problem 2. Approximation with interpolated Polynomials
+
+
+The Laguerre polynomial that has applications in differential equations and physics (particularly in quantum mechanics) that is  is defined by
+
+$$
+L_n(x) = \sum_{k=0}^n {n \choose k}\frac{(-1)^k}{k!}x^k
+$$
+
+In this problem, we only consider the degree 4 Laguerre polynomial 
+
+$$
+L_4(x) = \frac{x^4}{24} - \frac{2x^3}{3} + 3x^2 - 4x + 1
+$$
+
+over interval $[0,10]$.
+
+```{r fig.align='center', fig.height=4, fig.width=4}
+xx= seq(0, 10, length = 200)
+yy = xx^4/24 - (2/3)*xx^3 + 3*xx^2 - 4*xx + 1
+plot(xx, yy, type = "l", lwd = 2, col = "navy",
+     xlab = "", ylab = "",
+     main = "Degree 4 Laguerre Polynomial")
+abline(v=c(0, 10), h = 0, lty = 2, col = "blue")
+```
+
+The purpose of this problem is to assess the performance of the following three different approximated polynomials:
+
+
+1. The degree 4 Taylor polynomial expanded at $x = 7.75$.
+
+
+2. The Newton interpolated polynomial using unequally-spaced nodes $x =0.3 , 0.95, 3.3,  7.75, 9.4$
+
+
+3. The Newton interpolated polynomial using equally-spaced nodes $x = 1, 3, 5, 7, 9$
+
+
+Evaluate the above three approximated polynomials and the original Laguerre polynomial at $x = 3$ and compare the three approximated values with the true value obtained from the original Laguerre polynomial. Which polynomial gives the best approximation? 
+
+
+
+\
+
+
+## Problem 3. Application - Approximating Unknown Function and Making Prediction 
+
+The table below gives the actual thermal conductivity data for the element mercury. The objective is to find the analytic expression that approximates the relationship between temperature and pressure.
+
+
+|Temperature (Fahrenheit), T | 220  |  230 |  240 |  250 |  260 |  270 | 280  | 290  | 300  |
+|:----------------------------------|:-----|:-----|:-----|:-----|:-----|:-----|:-----|:-----|
+|Pressure (Pound), P         |17.19 |20.78 |24.97 |29.82 |35.42 |41.85 |49.18 |57.53 |66.98 |
+
+Use the Newton interpolation and all given data points to construct a polynomial of degree 8 and use this interpolating polynomial to **predict** the corresponding pressures for temperatures $T = 235, 255, 279, 295$. 
+
