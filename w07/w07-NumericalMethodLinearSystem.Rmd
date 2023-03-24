@@ -3,18 +3,6 @@ title: "10. Naive Gauss Elimination Method"
 author: "Cheng Peng"
 date: "Lecture Note for MAT325 Numerical Analysis "
 output:
-  pdf_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    number_sections: yes
-    fig_width: 3
-    fig_height: 3
-  word_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    keep_md: yes
   html_document: 
     toc: yes
     toc_depth: 4
@@ -24,6 +12,18 @@ output:
     number_sections: yes
     theme: readable
     fig_height: 4
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+    fig_width: 3
+    fig_height: 3
 editor_options: 
   chunk_output_type: inline
 ---
@@ -574,6 +574,9 @@ Gauss.Elimination = function(A){
 ```
 
 
+
+
+
 We now look at several examples using the above R function `Gauss.Elimination()`.
 
 **Example 2**: Find the solution of the following system of linear equations. 
@@ -678,6 +681,7 @@ include_graphics("img/w07-LabExample04-2-sol.png")
 A1 = matrix(c(1/4, 1/2, 1, 23/4, 1,1,1,7,4,2,1,2), ncol = 4, byrow = TRUE)
 Gauss.Jordan(A = A1)
 ```
+
 \
 
 **Example 6** (continuation of **Example 2**) Gauss-Jordan elimination
@@ -705,9 +709,11 @@ Gauss.Jordan(A = A8)
 ```
 
 
+# Chapter 6 HW Part I
 
+6.1.8.  Use the code in the note to solve the linear systems.
 
-
+6.2.10 (d). **optional**, need to modify the code by using three-digit chopping approach in each row operation.  
 
 
 
