@@ -125,6 +125,20 @@ include_graphics("img/01-zeroDegSplineCurve.png")
 
 \
 
+The three dimensional zero-degree spline can be similarly constructed.
+
+```{r echo=FALSE, fig.align ="center", out.width='40%'}
+include_graphics("img/w10-3DStepFunction.png")
+```
+
+
+
+We have also used this spline interpolation in Riemann sum in multivatiable integration in calculus.
+<https://demonstrations.wolfram.com/ApproximatingADoubleIntegralWithCuboids/>
+
+\
+
+
 \
 
 # Linear Splines
@@ -220,6 +234,15 @@ LSpline(x = x, y = y, x.new = c(10, 15, 16, 20))
 
 \
 
+As expected, linear spline idea can be used in the high dimensional space.
+
+```{r echo=FALSE, fig.align ="center", out.width='60%'}
+include_graphics("img/w10-linearInterpolation.png")
+```
+
+
+\
+
 # Quadratic Spline Interpolation
 
 Unlike linear spline interpolation in which two consecutive knots are connected by a line segment, in quadratic spline interpolation, two consecutive knots are connected by a curve of quadratic function, and every adjacent quadratic curve is connected smoothly (i.e., the derivative of the resulting quadratic spline exists at all **inner knots**).
@@ -260,13 +283,6 @@ for $k=1,2,\cdots, n-1.$ that can be written as
 $$
 (2x_k)a_k + b_k -(2x_k)a_{k+1} - b_{k+1} = 0
 $$
-
-
-
-
-
-
-
 
 -   **Default Assumption**. A common assumption we can take is to set $a_1 = 0$ or $a_1 = a_n$.
 
