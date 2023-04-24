@@ -1,18 +1,8 @@
 ---
-title: "15. Concepts of Numerical Integration: Trapezoid and Simpson Methods"
+title: "19. Concepts of Numerical Integration: Trapezoid and Simpson Methods"
 author: "Cheng Peng "
 date: "West Chester University"
 output:
-  pdf_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    number_sections: yes
-  word_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    keep_md: yes
   html_document: 
     toc: yes
     toc_depth: 4
@@ -22,6 +12,16 @@ output:
     fig_caption: yes
     number_sections: yes
     theme: readable
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
 ---
 
 ```{=html}
@@ -328,7 +328,7 @@ Trapezoid.int(fun=fun, xvec=c(0,pi), n = 50, graph=TRUE)
 
 Simpson’s One-third rule is an extension of the Trapezoidal rule where the integrand is approximated by a second-order polynomial.
 
-Simpson's rule approximates the integral over two neighboring sub-intervals by the area between a parabola and the $x$-axis. In order to describe this parabola we need $3$ distinct points (which is why we approximate two sub-integrals at a time). That is, we approximate
+Simpson's rule approximates the integral over two neighboring sub-intervals by the area between a parabola and the $x$-axis. To describe this parabola we need $3$ distinct points (which is why we approximate two sub-integrals at a time). That is, we approximate
 
 $$
 \int_{x_0}^{x_1} f(x) dx + \int_{x_1}^{x_2}f(x) dx = \int_{x_0}^{x_2}f(x)dx
@@ -575,8 +575,6 @@ Simpson.int=function(fun = NULL,     # fun = user-defined function
 
 Simpson.int(fun=fun, xvec=c(0,pi), n = 6, graph=TRUE)
 ```
-
-
 
 
 
