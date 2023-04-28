@@ -3,6 +3,16 @@ title: "19. Concepts of Numerical Integration: Trapezoid and Simpson Methods"
 author: "Cheng Peng "
 date: "West Chester University"
 output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    number_sections: yes
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    fig_caption: yes
+    keep_md: yes
   html_document: 
     toc: yes
     toc_depth: 4
@@ -12,16 +22,6 @@ output:
     fig_caption: yes
     number_sections: yes
     theme: readable
-  word_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    keep_md: yes
-  pdf_document: 
-    toc: yes
-    toc_depth: 4
-    fig_caption: yes
-    number_sections: yes
 ---
 
 ```{=html}
@@ -548,13 +548,14 @@ SimpsonGraph(fun = fun, xvec=c(0,pi), n = 4)
 
 
 
+
+
 ```{r}
 fun=function(x) sin(x)
 ##
 Simpson.int=function(fun = NULL,     # fun = user-defined function
                      xvec,           # vec = interval [a,b]
-                     n,          # number of partitions: MUST be an even number.
-                     graph = TRUE    # 
+                     n          # number of partitions: MUST be an even number.
                      ){
   a = min(xvec)
   b = max(xvec)
@@ -573,7 +574,7 @@ Simpson.int=function(fun = NULL,     # fun = user-defined function
   list(Estimated.Area = Iab)
 }
 
-Simpson.int(fun=fun, xvec=c(0,pi), n = 6, graph=TRUE)
+Simpson.int(fun=fun, xvec=c(0,pi), n = 18)
 ```
 
 

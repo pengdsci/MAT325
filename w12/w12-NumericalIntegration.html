@@ -2017,8 +2017,7 @@ SimpsonGraph(fun = fun, xvec=c(0,pi), n = 4)</code></pre>
 ##
 Simpson.int=function(fun = NULL,     # fun = user-defined function
                      xvec,           # vec = interval [a,b]
-                     n,          # number of partitions: MUST be an even number.
-                     graph = TRUE    # 
+                     n          # number of partitions: MUST be an even number.
                      ){
   a = min(xvec)
   b = max(xvec)
@@ -2037,9 +2036,9 @@ Simpson.int=function(fun = NULL,     # fun = user-defined function
   list(Estimated.Area = Iab)
 }
 
-Simpson.int(fun=fun, xvec=c(0,pi), n = 6, graph=TRUE)</code></pre>
+Simpson.int(fun=fun, xvec=c(0,pi), n = 18)</code></pre>
 <pre><code>## $Estimated.Area
-## [1] 2.000863</code></pre>
+## [1] 2.00001</code></pre>
 </div>
 </div>
 
