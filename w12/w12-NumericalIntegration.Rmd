@@ -356,14 +356,14 @@ if (knitr:::is_latex_output()) {
 
 ## Derivation of Simpson's Rule
 
-To derive Simpson's rule formula, we first find the equation of the parabola that passes through the three points $(x_0, f(x_0)), (x_1, f(x_1))$ and $(x_2, f(x_2))$. Then we find the area between the $x$-axis and the part of that parabola with $x_0 \le x \le x_2$. Assuming an equally spaced partition, we can re-write the three points as $(-h, y_{-h}), (0, y_0)$ and $(h, y_h)$
+To derive Simpson's rule formula, we first find the equation of the parabola that passes through the three points $(x_0, f(x_0)), (x_1, f(x_1))$ and $(x_2, f(x_2))$. Then we find the area between the $x$-axis and the part of that parabola with $x_0 \le x \le x_2$. Assuming an equally spaced partition, we consider the three points $(-h, y_{-h}), (0, y_0)$ and $(h, y_h)$ first (without loss of generality) to develop the formula of the approximated formula that is only dependent on the y-coordinates and the width of the sub-intervals $h = x_{i+1} - x_i$, for $i = 0, 1, \cdots, n-1$.
 
-We write the quadratic function in the following form.
+Using the quadratic function in the following form,
 $$
-y = Ax^2 + Bx + C
+y = ax^2 + bx + c
 $$
 
-Then the area between it and the $x$-axis with x running from $-h$ to $h$ is
+we write the area between it and the $x$-axis with x running from $-h$ to $h$ as
 
 $$
 \int_{-h}^h [ax^2 + bx + c]dx = \frac{h}{3}(2ah^2 + 6c)
@@ -425,12 +425,12 @@ $$
 To approximate the integral over interval $[a, b]$, we calculate the approximate integrals $[x_0, x_2], [x_2, x_4], \cdots, [x_{n-2}, x_n]$ separately and then take the sum of all individual integral.
  
  $$
- \int_{x_0}^{x_1}f(x)dx \approx \frac{\Delta x}{3}[f(x_0)+ 4f(x_1) + f(x_2)]
+ \int_{x_0}^{x_2}f(x)dx \approx \frac{\Delta x}{3}[f(x_0)+ 4f(x_1) + f(x_2)]
  $$
 and
 
 $$
- \int_{x_1}^{x_2}f(x)dx \approx \frac{\Delta x}{3}[f(x_1)+ 4f(x_2) + f(x_3)],
+ \int_{x_2}^{x_4}f(x)dx \approx \frac{\Delta x}{3}[f(x_2)+ 4f(x_3) + f(x_4)],
 $$
 
 and so on. Summing these all together gives
