@@ -358,11 +358,22 @@ where $a = x_0 < x_1 < \cdots < x_n = b$. $\{ x_1, \cdots, x_n\}$ are equal spac
 
 ## Romberg Algorithm
 
-From the last formula of the previous sub-section, we see that the trapezoidal rule has an order of approximation $O(h^2)$. Therefore, following the Richardson extrapolation with $r=2$, we have
+From the last formula of the previous sub-section, we see that the trapezoidal rule has an order of approximation $O(h^2)$. 
 
-```{r echo=FALSE, fig.align ="center", out.width='45%'}
+The higher order Richardson's algorithm has the following recursive relationship.
+
+$$
+\begin{array}{lclcl}
+ R(j, 0) & := & \phi(h/2^j) &  & j \ge 0;  \\ 
+ R(j, k) & := & \frac{2^{rk}R(j, k-1)-R(j-1, k-1)}{2^{rk}-1}  &   & j \ge k > 0.  
+\end{array}
+$$
+Therefore, following the Richardson extrapolation with $r=2$, we have
+
+```{r echo=FALSE, fig.align ="center", out.width='55%'}
 include_graphics("img/w13-RombergMethodAlgorithm.png")
 ```
+
 
 The corresponding Richardson extrapolation table is given by
 
@@ -376,6 +387,35 @@ include_graphics("img/w13-RombergRichardsonTable.png")
 
 Since this is a direct application of the Richardson extrapolation. We will simply implement it in R.
 
+**Goal**: approximate the definite integral
+
+$$
+\int_a^b f(x)dx
+$$
+
+**Partition**: partition interval $[a,b]$ with equal width $h$ that gives explicit partition
+$$
+a=x_0 < x_1 < x_2 < \cdots < x_{n-1} < x_n
+$$
+where $ h = x_{i+1} - x_i$ for $i = 0, 1, \cdots, n-1$.
+
+**Approximated area formula based on composite trapzoid rule**
+
+$$
+T(h) = \int_a^bf(x)dx = \frac{h}{2}\left[f(a) + 2\sum_{j=1}^{n-1}f(x_i) + f(b) \right] +O(h^2)
+$$
+$$
+= \sum_{j=1}^{n-1}f(x_i) + \frac{h[f(a) + f(b)]}{2} + O(h^2).
+$$
+**The approximated area is a function of $h$**
+$$
+\phi(h) =  \sum_{j=1}^{n-1}f(x_i) + \frac{h[f(a) + f(b)]}{2} \approx\int_a^b f(x) dx.
+$$
+with order $O(h^2)$.
+
+Therefore, in the high order Richardson extrapolation, $r = 2$ should be used. The following code implements the approximation.
+
+
 
 ```{r}
 Romberg.Trapz = function(fn,      # The original function f(x)
@@ -388,13 +428,13 @@ Romberg.Trapz = function(fn,      # The original function f(x)
    ## Trapezoid rule
    h = b - a       # initial h
    Trapz.fn = function(a,b,h){
-                   X = seq(a,b,h)
-                   TP = h*sum(fn(X)) - h*(fn(a)+fn(b))/2
+                   X = seq(a,b,h)  # partition of interval [a, b]
+                   TP = h*sum(fn(X)) + h*(fn(a)+fn(b))/2  
                    TP
                   }
    ## Romberg Int. starts:
    RR = matrix(rep(NA,J^2), ncol=J)
-   for (i in 1:J)  RR[i,1] = Trapz.fn(a,b, h/2^(i-1))   ## defining R(j,0)
+   for (i in 1:J)  RR[i,1] = Trapz.fn(a,b, h/(2^(i-1)))   ## defining R(j,0)
    for (k in 2:J){
        for (j in k:J){
            RR[j,k]=(2^(r*(k-1))*RR[j,k-1]-RR[j-1, k-1])/(2^(r*(k-1))-1)
