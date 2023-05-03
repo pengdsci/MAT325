@@ -120,8 +120,9 @@ In this note, we will introduce methods that use the same step size $h$ but arch
 
 # Richardson Extrapolation
 
+Richardson's extrapolation process is a well known method to improve the order of several approximation processes. It can be applied not only to improve the order of a numerical differentiation formula but also to find in fact the original formula.
 
-Using the concept of Richardson Extrapolation, very higher-order integration can be achieved using only a series of values from the Trapezoidal Rule. Similarly, accurate values of derivatives could be obtained using low-order central difference derivatives. 
+In this section, we use the concept of Richardson Extrapolation to demonstrate how a higher-order integration can be achieved using only a series of values from the Trapezoidal Rule. Similarly, accurate values of derivatives could be obtained using low-order central difference derivatives. 
 
 
 \

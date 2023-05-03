@@ -12,7 +12,7 @@
 <meta name="author" content="Cheng Peng" />
 
 
-<title>16. Romberg Integration and Gaussian Quadratures</title>
+<title>20. Romberg Integration and Gaussian Quadratures</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1502,7 +1502,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">16. Romberg Integration and Gaussian
+<h1 class="title toc-ignore">20. Romberg Integration and Gaussian
 Quadratures</h1>
 <h4 class="author">Cheng Peng</h4>
 <h4 class="date">West Chester University</h4>
@@ -1577,10 +1577,15 @@ approximation.</p>
 <div id="richardson-extrapolation" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Richardson
 Extrapolation</h1>
-<p>Using the concept of Richardson Extrapolation, very higher-order
-integration can be achieved using only a series of values from the
-Trapezoidal Rule. Similarly, accurate values of derivatives could be
-obtained using low-order central difference derivatives.</p>
+<p>Richardson’s extrapolation process is a well known method to improve
+the order of several approximation processes. It can be applied not only
+to improve the order of a numerical differentiation formula but also to
+find in fact the original formula.</p>
+<p>In this section, we use the concept of Richardson Extrapolation to
+demonstrate how a higher-order integration can be achieved using only a
+series of values from the Trapezoidal Rule. Similarly, accurate values
+of derivatives could be obtained using low-order central difference
+derivatives.</p>
 <p><br />
 </p>
 <div id="the-logic-of-the-richardson-method" class="section level2" number="2.1">
